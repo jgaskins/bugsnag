@@ -48,13 +48,32 @@ http = HTTP::Server.new([
 
 ### One-off usage
 
-## Development
+```crystal
+struct Foo
+  include JSON::Serializable
 
-TODO: Write development instructions here
+  getter bar : String
+  getter baz : Int32
+end
+
+begin
+  user = Queries::GetUserByID[user_id]
+  # code that can raise an exception
+rescue ex
+  spawn Bugsnag.notify ex,
+    user: Bugsnag::User.from_user(user),
+    app: BUGSNAG_APP,
+    metadata: Bugsnag::Metadata {
+      "foo" => foo
+    }
+
+  raise ex
+end
+```
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/bugsnag/fork>)
+1. Fork it (<https://github.com/jgaskins/bugsnag/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -62,4 +81,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+- [Jamie Gaskins](https://github.com/jgaskins) - creator and maintainer
