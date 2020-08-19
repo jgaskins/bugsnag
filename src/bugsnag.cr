@@ -376,11 +376,13 @@ module Bugsnag
     getter referer : String?
 
     def self.from_http_request(request)
+      scheme = request.headers.fetch("x-forwarded-proto", "http")
+      host = request.headers["host"]?
       new(
         client_ip: request.remote_address.as(Socket::IPAddress).address,
         headers: request.headers,
         http_method: request.method,
-        url: request.resource,
+        url: "#{scheme}://#{host}#{request.resource}",
         referer: request.headers["Referer"]?,
       )
     end
