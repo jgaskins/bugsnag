@@ -55,15 +55,23 @@ struct Foo
   getter bar : String
   getter baz : Int32
 end
+BUGSNAG_APP = Bugsnag::App.new(id: "my-app")
 
 begin
   user = Queries::GetUserByID[user_id]
   # code that can raise an exception
 rescue ex
   spawn Bugsnag.notify ex,
+    # If your user model has an `id`, `email`, and `name` properties, you can use the
+    # `.from_user` constructor. Otherwise, you need to build the `Bugsnag::User` with
+    # the `.new(id, email, name)` constructor.
     user: Bugsnag::User.from_user(user),
+    # The `app` here distinguishes your apps to the Bugsnag API
     app: BUGSNAG_APP,
+    # Additional metadata is supplied with a `Bugsnag::Metadata` hash-like object
     metadata: Bugsnag::Metadata {
+      # You can supply your own objects as metadata as long as they can be JSONified.
+      # In this example, `foo` is a `Foo` object (defined in the struct above).
       "foo" => foo
     }
 
