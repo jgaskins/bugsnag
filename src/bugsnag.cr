@@ -155,7 +155,7 @@ module Bugsnag
       @api_key : String = Bugsnag.api_key,
       @name = "Bugsnag Crystal",
       @version = VERSION,
-      @notifier_project_url = "https://github.com/jgaskins/bugsnag.cr",
+      @notifier_project_url = "https://github.com/jgaskins/bugsnag",
       @notify_uri = URI.parse("https://notify.bugsnag.com/")
     )
     end
