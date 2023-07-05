@@ -175,7 +175,7 @@ module Bugsnag
       response = HTTP::Client.post(
         @notify_uri,
         headers: HTTP::Headers{
-          "Bugsnag-API-Key"         => @api_key,
+          "Bugsnag-Api-Key"         => @api_key,
           "Bugsnag-Payload-Version" => PAYLOAD_VERSION,
           "Bugsnag-Sent-At"         => Time::Format::ISO_8601_DATE_TIME.format(Time.utc),
         },
