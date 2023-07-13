@@ -466,12 +466,14 @@ module Bugsnag
         in_project = file.starts_with?("src/") || file.starts_with?("views/")
         line_number = line_number.to_i
         column_number = column_number.to_i
-        code = [""] + File.read_lines(file)
+        code = [""] + (File.read_lines(file) rescue %w[])
         start_of_code = {line_number - 3, 1}.max
         end_of_code = {line_number + 3, code.size - 1}.min
         code_hash = {} of Int32 => String
         (start_of_code..end_of_code).each_with_index(start_of_code) do |line, index|
-          code_hash[index] = code[line]
+          if text = code[line]?
+            code_hash[index] = line
+          end
         end
 
         StackFrame.new(
