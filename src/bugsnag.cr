@@ -472,7 +472,7 @@ module Bugsnag
         code_hash = {} of Int32 => String
         (start_of_code..end_of_code).each_with_index(start_of_code) do |line, index|
           if text = code[line]?
-            code_hash[index] = line
+            code_hash[index] = text
           end
         end
 
