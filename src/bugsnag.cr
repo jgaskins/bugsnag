@@ -31,6 +31,7 @@ module Bugsnag
     context : String? = nil,
     user : User? = nil,
     session : Session? = nil,
+    unhandled : Bool = true,
     metadata : Metadata? = nil,
     app : App? = nil
   )
@@ -43,6 +44,7 @@ module Bugsnag
         request: Request.from_http_request(request),
         context: context,
         user: user,
+        unhandled: unhandled,
         session: session,
         metadata: metadata,
         app: app,
@@ -121,7 +123,7 @@ module Bugsnag
     #     id: "my-app-web",
     #     version: ENV["GIT_REF"]?,
     #     release_stage: ENV["DEPLOYMENT_ENVIRONMENT"]? || "development",
-    #     duration: (Time.monotonic - started_at).total_milliseconds.to_i,
+    #     duration: Time.monotonic - started_at,
     #   ) }
     # ```
     #
@@ -325,9 +327,10 @@ module Bugsnag
     getter type : String?
     @[JSON::Field(key: "dsymUUIDs")]
     getter dsym_uuids : String?
-    getter duration : Int32?
-    @[JSON::Field(key: "durationInForeground")]
-    getter duration_in_foreground : Int32?
+    @[JSON::Field(converter: Bugsnag::MillisecondsConverter)]
+    getter duration : Time::Span?
+    @[JSON::Field(key: "durationInForeground", converter: Bugsnag::MillisecondsConverter)]
+    getter duration_in_foreground : Time::Span?
     @[JSON::Field(key: "inForeground")]
     getter in_foreground : Bool?
     @[JSON::Field(key: "binaryArch")]
@@ -502,6 +505,15 @@ module Bugsnag
 
     def to_json(json : JSON::Builder)
       @raw.to_json json
+    end
+  end
+
+  # :nodoc:
+  module MillisecondsConverter
+    extend self
+
+    def to_json(value : Time::Span, json : JSON::Builder)
+      json.number value.total_milliseconds.to_i64
     end
   end
 end
