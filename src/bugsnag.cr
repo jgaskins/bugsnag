@@ -32,7 +32,7 @@ module Bugsnag
     user : User? = nil,
     session : Session? = nil,
     metadata : Metadata? = nil,
-    app : App? = nil,
+    app : App? = nil
   )
     events = [
       Event.new(
@@ -46,7 +46,7 @@ module Bugsnag
         session: session,
         metadata: metadata,
         app: app,
-      )
+      ),
     ]
 
     Client.new.notify events
@@ -59,7 +59,7 @@ module Bugsnag
   #   Bugsnag::Middleware.new
   #     .with_user { |context| Bugsnag::User.from_user(find_user_from(context)) }
   #     .with_app { Bugsnag::App.new(id: "my-app") }
-  #     .with_metadata { |context| Bugsnag::Metadata { "session" => context.session.data } },
+  #     .with_metadata { |context| Bugsnag::Metadata{"session" => context.session.data} },
   #   my_app,
   # ])
   # ```
@@ -101,8 +101,8 @@ module Bugsnag
     #
     # ```
     # Bugsnag::Middleware.new
-    #   .with_metadata { |context| Bugsnag::Metadata {
-    #     "session" => context.session.data,
+    #   .with_metadata { |context| Bugsnag::Metadata{
+    #     "session"     => context.session.data,
     #     "environment" => filter(hash_from(ENV)),
     #   } }
     # ```
@@ -226,7 +226,7 @@ module Bugsnag
       @user = nil,
       @app = nil,
       @session = nil,
-      @metadata = nil,
+      @metadata = nil
     )
     end
 
@@ -346,7 +346,7 @@ module Bugsnag
       @duration = nil,
       @duration_in_foreground = nil,
       @in_foreground = nil,
-      @binary_arch = nil,
+      @binary_arch = nil
     )
     end
 
